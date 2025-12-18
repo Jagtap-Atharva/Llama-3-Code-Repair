@@ -1,23 +1,55 @@
-# Fine-Tuned Llama-3 for Automated Python Code Repair
+# 🦙 Fine-Tuned Llama-3 for Automated Python Code Repair
 
-This project demonstrates **parameter-efficient fine-tuning (PEFT)** of the **Llama-3-8B** model to detect and fix bugs in Python code. 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](INSERT_YOUR_COLAB_LINK_HERE)
+![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
+![Library](https://img.shields.io/badge/Unsloth-Fast_Llama-green)
+![GPU](https://img.shields.io/badge/GPU-T4%20Compatible-orange)
+
+This project demonstrates the **parameter-efficient fine-tuning (PEFT)** of the **Llama-3-8B** model to specifically detect and fix logic and syntax errors in Python code. 
+
+By leveraging **QLoRA (Quantized Low-Rank Adaptation)** and the **Unsloth** library, this 8-billion parameter model was fine-tuned on a single commodity GPU (Tesla T4) while maintaining high inference accuracy.
+
+---
 
 ## 🚀 Project Overview
-- **Base Model:** Llama-3-8B (Quantized to 4-bit)
-- **Technique:** QLoRA (Quantized Low-Rank Adaptation) via `unsloth`
-- **Dataset:** `iamtarun/python_code_instructions_18k_alpaca` (subset)
-- **Infrastructure:** Trained on a single T4 GPU (Google Colab)
 
-## 🛠️ Tech Stack
-- **Unsloth:** For optimized 2x faster training
-- **Hugging Face `trl`:** Supervised Fine-Tuning (SFT)
-- **Peft:** LoRA adapter management
-- **BitsAndBytes:** 4-bit quantization
+Most modern LLMs are general-purpose. This project focuses on **transfer learning** to specialize a model for a single domain: **Software Engineering**.
 
-## 📊 Results
-The model was fine-tuned to take broken Python code as input and output the corrected version.
-- **Training Loss:** Decreased from ~2.0 to ~0.8 (Converged successfully)
-- **Inference Speed:** 2x faster inference using Unsloth native bindings
+* **Objective:** Input broken Python code $\rightarrow$ Output corrected, functional code.
+* **Technique:** Fine-tuned `Llama-3-8B-bnb-4bit` using LoRA adapters to update only 1-2% of parameters, keeping the base model frozen.
+* **Optimization:** Utilized **4-bit quantization** to reduce VRAM usage by ~70%, making training feasible on free tier Google Colab instances.
 
-## 💻 How to Run
-You can run this notebook directly in Google Colab
+---
+
+## 🛠️ Tech Stack & Methodology
+
+* **Model Architecture:** [Llama-3 8B (Unsloth Version)](https://huggingface.co/unsloth/llama-3-8b-bnb-4bit)
+* **Fine-Tuning Library:** [Unsloth](https://github.com/unslothai/unsloth) (2x faster training, 60% less memory)
+* **Adapter Framework:** Hugging Face `PEFT` (LoRA)
+* **Training Loop:** Hugging Face `TRL` (SFTTrainer)
+* **Dataset:** [iamtarun/python_code_instructions_18k_alpaca](https://huggingface.co/datasets/iamtarun/python_code_instructions_18k_alpaca)
+
+---
+
+## 📊 Training Results
+
+The model was trained for 60 steps to demonstrate convergence capability on the coding dataset.
+
+* **Training Loss:** Decreased from **~1.8** to **~0.8** (indicating strong learning convergence).
+* **Inference:** Capable of correcting logic errors (e.g., swapping subtraction for addition in an `add` function) that the base model might overlook without specific instructions.
+
+### Example Output
+**Input (Broken Code):**
+```python
+def add(a, b): return a - b
+
+Model Prediction (Fixed Code):
+def add(a, b): return a + b
+
+💻 How to Run This Project
+You can replicate this training run entirely in your browser using the Google Colab notebook.
+Click the Open in Colab badge at the top of this README.
+Change the Runtime type to T4 GPU.
+Run all cells to install dependencies (unsloth, trl, peft) and start training.
+
+Author: Atharva Jagtap
