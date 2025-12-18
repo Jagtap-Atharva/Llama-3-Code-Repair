@@ -20,5 +20,4 @@ The model was fine-tuned to take broken Python code as input and output the corr
 - **Inference Speed:** 2x faster inference using Unsloth native bindings
 
 ## 💻 How to Run
-You can run this notebook directly in Google Colab:
-[Link to your .ipynb file here]
+You can run this notebook directly in Google Colab
