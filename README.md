@@ -45,11 +45,3 @@ def add(a, b): return a - b
 
 Model Prediction (Fixed Code):
 def add(a, b): return a + b
-
-💻 How to Run This Project
-You can replicate this training run entirely in your browser using the Google Colab notebook.
-Click the Open in Colab badge at the top of this README.
-Change the Runtime type to T4 GPU.
-Run all cells to install dependencies (unsloth, trl, peft) and start training.
-
-Author: Atharva Jagtap
